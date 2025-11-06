@@ -9,6 +9,4 @@ Nate Harris,
 Karina Mehta,
 Rameez Ali
 
-Need to add .gitignore
-
 
