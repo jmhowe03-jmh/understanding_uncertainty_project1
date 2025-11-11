@@ -10,3 +10,8 @@ Karina Mehta,
 Rameez Ali
 
 
+Used Data Found here: https://www.kaggle.com/datasets/andrewmvd/sp-500-stocks/versions/1022
+- used version 1022 as 1023 has ~60% missing values
+
+
+
