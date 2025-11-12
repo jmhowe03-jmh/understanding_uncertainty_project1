@@ -60,7 +60,7 @@ external_stylesheets = [
 ]
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
-app.layout = html.Div([
+main_blocks = [
     html.H1("S&P 500 Analysis Dashboard", className="display-4 text-center mb-4", style={
         'fontFamily': 'Roboto, sans-serif',
         'fontWeight': 700,
@@ -71,20 +71,92 @@ app.layout = html.Div([
         'padding': '24px 0',
         'boxShadow': '0 2px 8px rgba(0,0,0,0.07)'
     }),
-
-    html.Div([
-        dcc.Markdown(cell, style={
-            'marginBottom': '20px',
-            'background': '#f8f9fa',
-            'borderRadius': '8px',
-            'padding': '16px',
+    # Markdown cells (add/remove/reorder as needed)
+    dcc.Markdown(markdown_cells[0], style={
+        'marginBottom': '20px',
+        'background': '#f8f9fa',
+        'borderRadius': '8px',
+        'padding': '16px',
+        'fontFamily': 'Roboto, sans-serif',
+        'fontSize': '1.05rem',
+        'boxShadow': '0 1px 4px rgba(0,0,0,0.04)'
+    }),
+    dcc.Markdown(markdown_cells[1], style={
+        'marginBottom': '20px',
+        'background': '#f8f9fa',
+        'borderRadius': '8px',
+        'padding': '16px',
+        'fontFamily': 'Roboto, sans-serif',
+        'fontSize': '1.05rem',
+        'boxShadow': '0 1px 4px rgba(0,0,0,0.04)'
+    }),
+    dcc.Markdown(markdown_cells[2], style={
+        'marginBottom': '20px',
+        'background': '#f8f9fa',
+        'borderRadius': '8px',
+        'padding': '16px',
+        'fontFamily': 'Roboto, sans-serif',
+        'fontSize': '1.05rem',
+        'boxShadow': '0 1px 4px rgba(0,0,0,0.04)'
+    }),
+    dcc.Markdown(markdown_cells[3], style={
+        'marginBottom': '20px',
+        'background': '#f8f9fa',
+        'borderRadius': '8px',
+        'padding': '16px',
+        'fontFamily': 'Roboto, sans-serif',
+        'fontSize': '1.05rem',
+        'boxShadow': '0 1px 4px rgba(0,0,0,0.04)'
+    }),
+    dcc.Markdown(markdown_cells[4], style={
+        'marginBottom': '20px',
+        'background': '#f8f9fa',
+        'borderRadius': '8px',
+        'padding': '16px',
+        'fontFamily': 'Roboto, sans-serif',
+        'fontSize': '1.05rem',
+        'boxShadow': '0 1px 4px rgba(0,0,0,0.04)'
+    }),
+    dcc.Markdown(markdown_cells[5], style={
+        'marginBottom': '20px',
+        'background': '#f8f9fa',
+        'borderRadius': '8px',
+        'padding': '16px',
+        'fontFamily': 'Roboto, sans-serif',
+        'fontSize': '1.05rem',
+        'boxShadow': '0 1px 4px rgba(0,0,0,0.04)'
+    }),
+    html.H2("True vs Predicted S&P500 Values", className="h4 mt-4 mb-2 text-primary", style={
+        'fontFamily': 'Roboto, sans-serif',
+        'fontWeight': 600
+    }),
+    dcc.Graph(id='true-pred-graph', figure=fig_true_vs_pred, style={
+        'background': '#fff',
+        'borderRadius': '10px',
+        'boxShadow': '0 1px 8px rgba(0,0,0,0.06)',
+        'padding': '12px',
+        'marginBottom': '32px'
+    }),
+    html.Div("Current model RMSE: {:.3f}  MAE: {:.3f}".format(rmse, mae), style={
+            'display': 'inline-block',
+            'marginLeft': '24px',
             'fontFamily': 'Roboto, sans-serif',
-            'fontSize': '1.05rem',
+            'fontSize': '1.1rem',
+            'color': '#495057',
+            'background': '#e9ecef',
+            'borderRadius': '6px',
+            'padding': '6px 14px',
             'boxShadow': '0 1px 4px rgba(0,0,0,0.04)'
-        })
-        for cell in markdown_cells
-    ], className="mb-4"),
-
+    }),
+    dcc.Markdown(markdown_cells[6], style={
+        'marginBottom': '20px',
+        'background': '#f8f9fa',
+        'borderRadius': '8px',
+        'padding': '16px',
+        'fontFamily': 'Roboto, sans-serif',
+        'fontSize': '1.05rem',
+        'boxShadow': '0 1px 4px rgba(0,0,0,0.04)'
+    }),
     html.Div([
         html.Label("Number of bootstraps:", style={
             'fontWeight': 500,
@@ -111,31 +183,7 @@ app.layout = html.Div([
             'borderRadius': '6px',
             'boxShadow': '0 1px 4px rgba(0,0,0,0.06)'
         }),
-        html.Div("Current model RMSE: {:.3f}  MAE: {:.3f}".format(rmse, mae), style={
-            'display': 'inline-block',
-            'marginLeft': '24px',
-            'fontFamily': 'Roboto, sans-serif',
-            'fontSize': '1.1rem',
-            'color': '#495057',
-            'background': '#e9ecef',
-            'borderRadius': '6px',
-            'padding': '6px 14px',
-            'boxShadow': '0 1px 4px rgba(0,0,0,0.04)'
-        })
     ], className="d-flex align-items-center mb-4 justify-content-center gap-2"),
-
-    html.H2("True vs Predicted S&P500 Values", className="h4 mt-4 mb-2 text-primary", style={
-        'fontFamily': 'Roboto, sans-serif',
-        'fontWeight': 600
-    }),
-    dcc.Graph(id='true-pred-graph', figure=fig_true_vs_pred, style={
-        'background': '#fff',
-        'borderRadius': '10px',
-        'boxShadow': '0 1px 8px rgba(0,0,0,0.06)',
-        'padding': '12px',
-        'marginBottom': '32px'
-    }),
-
     html.H2("RMSE Bootstrapped Distribution", className="h4 mt-4 mb-2 text-secondary", style={
         'fontFamily': 'Roboto, sans-serif',
         'fontWeight': 600
@@ -147,7 +195,6 @@ app.layout = html.Div([
         'padding': '12px',
         'marginBottom': '32px'
     })),
-
     html.H2("MAE Bootstrapped Distribution", className="h4 mt-4 mb-2 text-secondary", style={
         'fontFamily': 'Roboto, sans-serif',
         'fontWeight': 600
@@ -159,7 +206,34 @@ app.layout = html.Div([
         'padding': '12px',
         'marginBottom': '32px'
     })),
-
+    dcc.Markdown(markdown_cells[7], style={
+        'marginBottom': '20px',
+        'background': '#f8f9fa',
+        'borderRadius': '8px',
+        'padding': '16px',
+        'fontFamily': 'Roboto, sans-serif',
+        'fontSize': '1.05rem',
+        'boxShadow': '0 1px 4px rgba(0,0,0,0.04)'
+    }),
+    dcc.Markdown(markdown_cells[8], style={
+        'marginBottom': '20px',
+        'background': '#f8f9fa',
+        'borderRadius': '8px',
+        'padding': '16px',
+        'fontFamily': 'Roboto, sans-serif',
+        'fontSize': '1.05rem',
+        'boxShadow': '0 1px 4px rgba(0,0,0,0.04)'
+    }),
+    dcc.Markdown(markdown_cells[9], style={
+        'marginBottom': '20px',
+        'background': '#f8f9fa',
+        'borderRadius': '8px',
+        'padding': '16px',
+        'fontFamily': 'Roboto, sans-serif',
+        'fontSize': '1.05rem',
+        'boxShadow': '0 1px 4px rgba(0,0,0,0.04)'
+    }),
+    # Graphs (add/remove/reorder as needed)
     html.H2("Full Dashboard", className="h4 mt-4 mb-2 text-info", style={
         'fontFamily': 'Roboto, sans-serif',
         'fontWeight': 600
@@ -171,15 +245,20 @@ app.layout = html.Div([
         'padding': '12px',
         'marginBottom': '32px'
     }))
-], style={
-    'width': '98%',
-    'maxWidth': '1400px',
-    'margin': '0 auto',
-    'background': '#f4f8fb',
-    'borderRadius': '16px',
-    'padding': '24px 0 32px 0',
-    'boxShadow': '0 2px 16px rgba(0,0,0,0.07)'
-})
+]
+
+app.layout = html.Div(
+    main_blocks,
+    style={
+        'width': '98%',
+        'maxWidth': '1400px',
+        'margin': '0 auto',
+        'background': '#f4f8fb',
+        'borderRadius': '16px',
+        'padding': '24px 0 32px 0',
+        'boxShadow': '0 2px 16px rgba(0,0,0,0.07)'
+    }
+)
 
 
 @app.callback(
