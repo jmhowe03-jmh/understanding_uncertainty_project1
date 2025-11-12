@@ -4,7 +4,7 @@ from statsmodels.nonparametric.kernel_regression import KernelReg
 import seaborn as sns
 from plotly.subplots import make_subplots
 import dash
-from dash import dcc, html
+from dash import dcc, html, no_update
 from dash.dependencies import Input, Output, State
 
 import matplotlib.pyplot as plt
@@ -53,35 +53,133 @@ markdown_cells = [
 ]
 
 # Dash app
-app = dash.Dash(__name__)
+external_stylesheets = [
+    'https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css'
+]
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 app.layout = html.Div([
-    html.H1("S&P 500 Analysis Dashboard", style={'textAlign': 'center'}),
+    html.H1("S&P 500 Analysis Dashboard", className="display-4 text-center mb-4", style={
+        'fontFamily': 'Roboto, sans-serif',
+        'fontWeight': 700,
+        'color': '#222',
+        'letterSpacing': '1px',
+        'background': 'linear-gradient(90deg, #e3ffe8 0%, #eaf6ff 100%)',
+        'borderRadius': '12px',
+        'padding': '24px 0',
+        'boxShadow': '0 2px 8px rgba(0,0,0,0.07)'
+    }),
 
     html.Div([
-        dcc.Markdown(cell, style={'marginBottom': '20px'})
+        dcc.Markdown(cell, style={
+            'marginBottom': '20px',
+            'background': '#f8f9fa',
+            'borderRadius': '8px',
+            'padding': '16px',
+            'fontFamily': 'Roboto, sans-serif',
+            'fontSize': '1.05rem',
+            'boxShadow': '0 1px 4px rgba(0,0,0,0.04)'
+        })
         for cell in markdown_cells
-    ]),
+    ], className="mb-4"),
 
     html.Div([
-        html.Label("Number of bootstraps:"),
-        dcc.Input(id='n-boot-input', type='number', min=1, max=10000, step=1, value=10, style={'marginRight': '10px'}),
-        html.Button("Run Bootstraps", id='run-button', n_clicks=0),
-        html.Div("Current model RMSE: {:.3f}  MAE: {:.3f}".format(rmse, mae), style={'display': 'inline-block', 'marginLeft': '20px'})
-    ], style={'marginBottom': '20px'}),
+        html.Label("Number of bootstraps:", style={
+            'fontWeight': 500,
+            'marginRight': '10px',
+            'fontFamily': 'Roboto, sans-serif',
+            'fontSize': '1.1rem'
+        }),
+        dcc.Input(id='n-boot-input', type='number', min=1, max=10000, step=1, value=10, style={
+            'marginRight': '10px',
+            'width': '120px',
+            'borderRadius': '6px',
+            'border': '1px solid #ced4da',
+            'padding': '6px 10px',
+            'fontFamily': 'Roboto, sans-serif',
+            'fontSize': '1rem'
+        }),
+        html.Button([
+            html.I(className="fas fa-play me-2"), "Run Bootstraps"
+        ], id='run-button', n_clicks=0, className="btn btn-success", style={
+            'fontWeight': 600,
+            'fontFamily': 'Roboto, sans-serif',
+            'fontSize': '1rem',
+            'padding': '6px 18px',
+            'borderRadius': '6px',
+            'boxShadow': '0 1px 4px rgba(0,0,0,0.06)'
+        }),
+        html.Div("Current model RMSE: {:.3f}  MAE: {:.3f}".format(rmse, mae), style={
+            'display': 'inline-block',
+            'marginLeft': '24px',
+            'fontFamily': 'Roboto, sans-serif',
+            'fontSize': '1.1rem',
+            'color': '#495057',
+            'background': '#e9ecef',
+            'borderRadius': '6px',
+            'padding': '6px 14px',
+            'boxShadow': '0 1px 4px rgba(0,0,0,0.04)'
+        })
+    ], className="d-flex align-items-center mb-4 justify-content-center gap-2"),
 
-    html.H2("True vs Predicted S&P500 Values"),
-    dcc.Graph(id='true-pred-graph', figure=fig_true_vs_pred),
+    html.H2("True vs Predicted S&P500 Values", className="h4 mt-4 mb-2 text-primary", style={
+        'fontFamily': 'Roboto, sans-serif',
+        'fontWeight': 600
+    }),
+    dcc.Graph(id='true-pred-graph', figure=fig_true_vs_pred, style={
+        'background': '#fff',
+        'borderRadius': '10px',
+        'boxShadow': '0 1px 8px rgba(0,0,0,0.06)',
+        'padding': '12px',
+        'marginBottom': '32px'
+    }),
 
-    html.H2("RMSE Bootstrapped Distribution"),
-    dcc.Loading(dcc.Graph(id='rmse-kde-graph')),  # figure provided by callback
+    html.H2("RMSE Bootstrapped Distribution", className="h4 mt-4 mb-2 text-secondary", style={
+        'fontFamily': 'Roboto, sans-serif',
+        'fontWeight': 600
+    }),
+    dcc.Loading(dcc.Graph(id='rmse-kde-graph', style={
+        'background': '#fff',
+        'borderRadius': '10px',
+        'boxShadow': '0 1px 8px rgba(0,0,0,0.06)',
+        'padding': '12px',
+        'marginBottom': '32px'
+    })),
 
-    html.H2("MAE Bootstrapped Distribution"),
-    dcc.Loading(dcc.Graph(id='mae-kde-graph')),   # figure provided by callback
+    html.H2("MAE Bootstrapped Distribution", className="h4 mt-4 mb-2 text-secondary", style={
+        'fontFamily': 'Roboto, sans-serif',
+        'fontWeight': 600
+    }),
+    dcc.Loading(dcc.Graph(id='mae-kde-graph', style={
+        'background': '#fff',
+        'borderRadius': '10px',
+        'boxShadow': '0 1px 8px rgba(0,0,0,0.06)',
+        'padding': '12px',
+        'marginBottom': '32px'
+    })),
 
-    html.H2("Full Dashboard"),
-    dcc.Loading(dcc.Graph(id='dashboard-graph'))  # figure provided by callback
-], style={'width': '95%', 'margin': '0 auto'})
+    html.H2("Full Dashboard", className="h4 mt-4 mb-2 text-info", style={
+        'fontFamily': 'Roboto, sans-serif',
+        'fontWeight': 600
+    }),
+    dcc.Loading(dcc.Graph(id='dashboard-graph', style={
+        'background': '#fff',
+        'borderRadius': '10px',
+        'boxShadow': '0 1px 8px rgba(0,0,0,0.06)',
+        'padding': '12px',
+        'marginBottom': '32px'
+    }))
+], style={
+    'width': '98%',
+    'maxWidth': '1400px',
+    'margin': '0 auto',
+    'background': '#f4f8fb',
+    'borderRadius': '16px',
+    'padding': '24px 0 32px 0',
+    'boxShadow': '0 2px 16px rgba(0,0,0,0.07)'
+})
 
 
 @app.callback(
