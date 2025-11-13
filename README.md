@@ -13,5 +13,6 @@ Rameez Ali
 Used Data Found here: https://www.kaggle.com/datasets/andrewmvd/sp-500-stocks/versions/1022
 - used version 1022 as 1023 has ~67% missing values
 
-
+To use the dashboard, you must have all three CSV files in a folder called "data" in the same directory as the streamlit script.
+Then run the script with streamlit run streamlit_dashboard.py
 
